@@ -1,5 +1,6 @@
 ﻿namespace OwareAbapa.Controllers
 open System.Web.Http
+open OwareAbapa.Models
 
 type GameController() =
     inherit ApiController()
