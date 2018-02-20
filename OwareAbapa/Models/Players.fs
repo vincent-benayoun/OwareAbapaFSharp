@@ -1,6 +1,6 @@
 ﻿namespace OwareAbapa.Models
 
-module Players =
+module Player =
 
     type player = Player1 | Player2
 

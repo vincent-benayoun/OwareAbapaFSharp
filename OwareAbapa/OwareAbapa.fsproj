@@ -131,6 +131,7 @@
     <Compile Include="Models\Board.fs" />
     <Compile Include="Models\Players.fs" />
     <Compile Include="Models\Score.fs" />
+    <Compile Include="Models\GameState.fs" />
     <Compile Include="Controllers\CarsController.fs" />
     <Compile Include="Controllers\GameController.fs" />
     <Content Include="Web.config" />
