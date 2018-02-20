@@ -8,7 +8,32 @@ module Board =
     let empty : board = (0,0,0, 0,0,0,  0,0,0, 0,0,0)
     let initial : board = (4,4,4, 4,4,4,  4,4,4, 4,4,4)
 
-    let getCase(board, case) =
+    let allCases = [C1;C2;C3;C4;C5;C6;C7;C8;C9;C10;C11;C12]
+    let casesOfPlayer player =
+        match player with
+        | Player.Player1 -> [C1;C2;C3;C4;C5;C6]
+        | Player.Player2 -> [C7;C8;C9;C10;C11;C12]
+    let lastCaseOfPlayerIndex player =
+        match player with
+        | Player.Player1 -> 6
+        | Player.Player2 -> 12
+
+    let indexOfCase case =
+        match case with
+        | C1 -> 1
+        | C2 -> 2
+        | C3 -> 3
+        | C4 -> 4
+        | C5 -> 5
+        | C6 -> 6
+        | C7 -> 7
+        | C8 -> 8
+        | C9 -> 9
+        | C10 -> 10
+        | C11 -> 11
+        | C12 -> 12
+
+    let getCase board case =
         let (c1,c2,c3,c4,c5,c6, c7,c8,c9,c10,c11,c12) = board
         match case with
         | C1 -> c1
@@ -32,14 +57,14 @@ module Board =
         let f(c, _) =
             if c = case
             then 0
-            else getCase(board, c)
+            else getCase board  c 
         map(board, f)
 
     let incrementCase(board, case) =
         let f(c, _) =
             if c = case
-            then getCase(board, c) + 1
-            else getCase(board, c)
+            then getCase board c + 1
+            else getCase board c
         map(board, f)
 
     let nextCase(case) =
