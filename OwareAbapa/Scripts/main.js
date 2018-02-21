@@ -1,22 +1,26 @@
 ﻿var globalGameState;
 
+function animateElement(caseElement, direction) {
+    var intermediateColor = direction ? "green" : "red";
+    caseElement.animate({ backgroundColor: intermediateColor }, 600).animate({ backgroundColor: "grey" }, 600);
+}
+
+function displayNumber(element, newValue) {
+    let previousValue = element.html();
+    element.html(newValue);
+    if (newValue != previousValue) {
+        animateElement(element, newValue > previousValue);
+    }
+}
+
 function displayGameState(gameState) {
     $('#currentPlayer').html(gameState.currentPlayer);
-    $('#scorePlayer1').html(gameState.score.player1);
-    $('#scorePlayer2').html(gameState.score.player2);
+    displayNumber($('#scorePlayer1'), gameState.score.player1);
+    displayNumber($('#scorePlayer2'), gameState.score.player2);
 
-    $('#C1').html(gameState.board.c1);
-    $('#C2').html(gameState.board.c2);
-    $('#C3').html(gameState.board.c3);
-    $('#C4').html(gameState.board.c4);
-    $('#C5').html(gameState.board.c5);
-    $('#C6').html(gameState.board.c6);
-    $('#C7').html(gameState.board.c7);
-    $('#C8').html(gameState.board.c8);
-    $('#C9').html(gameState.board.c9);
-    $('#C10').html(gameState.board.c10);
-    $('#C11').html(gameState.board.c11);
-    $('#C12').html(gameState.board.c12);
+    for (let i = 0; i <= 12; i++) {
+        displayNumber($("#C" + i), gameState.board['c'+i]);
+    }
 
     var colorBoardPlayer1, colorBoardPlayer2;
     [colorBoardPlayer1, colorBoardPlayer2] = (gameState.currentPlayer == "Player1") ? ["yellow", ""] : ["", "yellow"];
