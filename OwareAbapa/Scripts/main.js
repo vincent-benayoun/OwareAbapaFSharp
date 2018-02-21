@@ -17,6 +17,11 @@ function displayGameState(gameState) {
     $('#C10').html(gameState.board.c10);
     $('#C11').html(gameState.board.c11);
     $('#C12').html(gameState.board.c12);
+
+    var colorBoardPlayer1, colorBoardPlayer2;
+    [colorBoardPlayer1, colorBoardPlayer2] = (gameState.currentPlayer == "Player1") ? ["yellow", ""] : ["", "yellow"];
+    $('#boardPlayer1').css("background-color", colorBoardPlayer1);
+    $('#boardPlayer2').css("background-color", colorBoardPlayer2);
 }
 
 function refreshGameState(newGameState) {
@@ -49,5 +54,5 @@ $(function () {
     newGame();
     //$('.boardCase').click(function () { console.log($(this).attr("id")) });
 
-    $('.boardCase').click(clickOnBoardCase);
+    $('.boardCase button').click(clickOnBoardCase);
 });
