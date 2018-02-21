@@ -2,11 +2,13 @@
 
 module Board =
 
-    type board = int*int*int * int*int*int * int*int*int * int*int*int
+    [<CLIMutable>]
+    type board = { C1:int; C2:int; C3:int; C4:int; C5:int; C6:int;
+                   C7:int; C8:int; C9:int; C10:int; C11:int; C12:int }
     type case = C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | C10 | C11 | C12
 
-    let empty : board = (0,0,0, 0,0,0,  0,0,0, 0,0,0)
-    let initial : board = (4,4,4, 4,4,4,  4,4,4, 4,4,4)
+    let empty : board = {C1=0;C2=0;C3=0; C4=0;C5=0;C6=0;  C7=0;C8=0;C9=0; C10=0;C11=0;C12=0}
+    let initial : board = {C1=4;C2=4;C3=4; C4=4;C5=4;C6=4;  C7=4;C8=4;C9=4; C10=4;C11=4;C12=4}
 
     let allCases = [C1;C2;C3;C4;C5;C6;C7;C8;C9;C10;C11;C12]
     let casesOfPlayer player =
@@ -34,24 +36,33 @@ module Board =
         | C12 -> 12
 
     let getCase board case =
-        let (c1,c2,c3,c4,c5,c6, c7,c8,c9,c10,c11,c12) = board
         match case with
-        | C1 -> c1
-        | C2 -> c2
-        | C3 -> c3
-        | C4 -> c4
-        | C5 -> c5
-        | C6 -> c6
-        | C7 -> c7
-        | C8 -> c8
-        | C9 -> c9
-        | C10 -> c10
-        | C11 -> c11
-        | C12 -> c12
+        | C1 -> board.C1
+        | C2 -> board.C2
+        | C3 -> board.C3
+        | C4 -> board.C4
+        | C5 -> board.C5
+        | C6 -> board.C6
+        | C7 -> board.C7
+        | C8 -> board.C8
+        | C9 -> board.C9
+        | C10 -> board.C10
+        | C11 -> board.C11
+        | C12 -> board.C12
 
     let map(board: board, f) =
-        let (c1,c2,c3,c4,c5,c6, c7,c8,c9,c10,c11,c12) = board
-        (f(C1,c1),f(C2,c2),f(C3,c3),f(C4,c4),f(C5,c5),f(C6,c6), f(C7,c7),f(C8,c8),f(C9,c9),f(C10,c10),f(C11,c11),f(C12,c12))
+        { C1 = f(C1,board.C1);
+          C2 = f(C2,board.C2);
+          C3 = f(C3,board.C3);
+          C4 = f(C4,board.C4);
+          C5 = f(C5,board.C5);
+          C6 = f(C6,board.C6);
+          C7 = f(C7,board.C7);
+          C8 = f(C8,board.C8);
+          C9 = f(C9,board.C9);
+          C10 = f(C10,board.C10);
+          C11 = f(C11,board.C11);
+          C12 = f(C12,board.C12);}
 
     let emptyCase(board, case) =
         let f(c, _) =

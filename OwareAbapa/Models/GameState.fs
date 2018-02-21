@@ -14,11 +14,11 @@ module GameState =
     type win_status = StillPlaying | GameEnded of winner
 
     let getWinStatus(gameState) =
-        let firstPlayerWon = gameState.score.firstPlayer > 24
-        let secondPlayerWon = gameState.score.secondPlayer > 24
+        let firstPlayerWon = gameState.score.Player1 > 24
+        let secondPlayerWon = gameState.score.Player2 > 24
         let exaequo =
-            gameState.score.secondPlayer = 24
-            && gameState.score.secondPlayer = 24
+            gameState.score.Player2 = 24
+            && gameState.score.Player2 = 24
 
         if firstPlayerWon then
             GameEnded(Winner(Player.Player1))

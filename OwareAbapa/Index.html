@@ -5,23 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Car List App</title>
+    <title>OWARE - ABAPA</title>
     <link href="./Content/bootstrap.min.css" rel="stylesheet">
     <link href="./Content/Site.css" rel="stylesheet">
 </head>
 <body>
 
     <div class="container">
-        <h2 class="sub-header">All Cars</h2>
-        <table id="cars" class="table">
+        <h2 class="sub-header">OWARE - ABAPA</h2>
+        <table class="table">
             <thead>
-                <tr>
-                    <td>#</td>
-                    <td>Make</td>
-                    <td>Model</td>
-                </tr>
+            <tr>
+                <td><strong>Current Player</strong></td>
+                <td><strong>Score Player 1</strong></td>
+                <td><strong>Score Player 2</strong></td>
+            </tr>
             </thead>
-            <tbody />
+            <tbody>
+            <tr>
+                <td id="currentPlayer">Current Player</td>
+                <td id="scorePlayer1">Score Player 1</td>
+                <td id="scorePlayer2">Score Player 2</td>
+            </tr>
+            </tbody>
+        </table>
+        <br /><br />
+        <table class="table" style="border: 1px solid">
+            <tbody>
+            <tr>
+                <td><button id="C12" class="boardCase"></button></td>
+                <td><button id="C11" class="boardCase"></button></td>
+                <td><button id="C10" class="boardCase"></button></td>
+                <td><button id="C9" class="boardCase"></button></td>
+                <td><button id="C8" class="boardCase"></button></td>
+                <td><button id="C7" class="boardCase"></button></td>
+            </tr>
+            <tr>
+                <td><button id="C1" class="boardCase"></button></td>
+                <td><button id="C2" class="boardCase"></button></td>
+                <td><button id="C3" class="boardCase"></button></td>
+                <td><button id="C4" class="boardCase"></button></td>
+                <td><button id="C5" class="boardCase"></button></td>
+                <td><button id="C6" class="boardCase"></button></td>
+            </tr>
+            </tbody>
         </table>
     </div>
 

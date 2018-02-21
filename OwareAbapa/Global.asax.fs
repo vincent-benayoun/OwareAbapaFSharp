@@ -8,6 +8,7 @@ open System.Web.Routing
 
 type HttpRoute = {
     controller : string
+    action : string
     id : RouteParameter }
 
 type Global() =
@@ -18,13 +19,16 @@ type Global() =
         config.MapHttpAttributeRoutes()
         config.Routes.MapHttpRoute(
             "DefaultApi", // Route name
-            "api/{controller}/{id}", // URL with parameters
-            { controller = "{controller}"; id = RouteParameter.Optional } // Parameter defaults
+            "api/{controller}/{action}/{id}", // URL with parameters
+            { controller = "{controller}"; action = "{action}"; id = RouteParameter.Optional } // Parameter defaults
         ) |> ignore
 
         // Configure serialization
         config.Formatters.XmlFormatter.UseXmlSerializer <- true
         config.Formatters.JsonFormatter.SerializerSettings.ContractResolver <- Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+
+        //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver <-
+        //    Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
 
         // Additional Web API settings
 

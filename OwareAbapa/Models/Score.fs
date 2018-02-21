@@ -3,12 +3,13 @@
 module Score =
 
     open Player
+    
+    [<CLIMutable>]
+    type score = { Player1: int; Player2: int }
 
-    type score = { firstPlayer: int; secondPlayer: int }
-
-    let initial = { firstPlayer = 0; secondPlayer = 0 }
+    let initial = { Player1 = 0; Player2 = 0 }
 
     let addPoints(score, player, numberOfPoints) =
         match player with
-        | Player1 -> { score with firstPlayer = score.firstPlayer + numberOfPoints }
-        | Player2 -> { score with secondPlayer = score.secondPlayer + numberOfPoints }
+        | Player1 -> { score with Player1 = score.Player1 + numberOfPoints }
+        | Player2 -> { score with Player2 = score.Player2 + numberOfPoints }
