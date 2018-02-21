@@ -49,7 +49,7 @@ module Board =
         | C11 -> c11
         | C12 -> c12
 
-    let map(board, f) =
+    let map(board: board, f) =
         let (c1,c2,c3,c4,c5,c6, c7,c8,c9,c10,c11,c12) = board
         (f(C1,c1),f(C2,c2),f(C3,c3),f(C4,c4),f(C5,c5),f(C6,c6), f(C7,c7),f(C8,c8),f(C9,c9),f(C10,c10),f(C11,c11),f(C12,c12))
 

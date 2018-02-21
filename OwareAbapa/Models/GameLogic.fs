@@ -63,3 +63,38 @@ module GameLogic =
         let lastCaseOfPlayerIndex = Board.lastCaseOfPlayerIndex gameState.currentPlayer
         let getCase = Board.getCase gameState.board
         List.forall (fun case -> Board.indexOfCase case + getCase case <= lastCaseOfPlayerIndex ) casesOfPlayer
+
+    let seeds board originCase =
+        let boardWithEmptyCase = Board.emptyCase(board, originCase)
+        let numberOfSeeds = Board.getCase board originCase
+        distribute(boardWithEmptyCase, originCase, numberOfSeeds)
+        
+
+    type play_result = InvalidCase | EmptyCase | NeedsToFeed | InternalError | Played of game_state
+
+    // Current player plays case
+    let play gameState case =
+        let casesOfPlayer = Board.casesOfPlayer gameState.currentPlayer
+        if not (List.exists ((=) case) casesOfPlayer) then InvalidCase else
+        if Board.getCase gameState.board case = 0 then EmptyCase else
+
+        let nextPlayer = Player.nextPlayer gameState.currentPlayer
+        let adversaryHadNoSeed = hasNoSeeds gameState gameState.currentPlayer
+        let nothingFeedsAdversary = nothingFeeds gameState
+
+        if adversaryHadNoSeed && nothingFeedsAdversary
+        then
+            Played { captureAll gameState with currentPlayer = Player.nextPlayer gameState.currentPlayer }
+        else
+            match seeds gameState.board case with
+            | InvalidArgument -> InternalError
+            | Distrubuted(boardAfterSeeding, lastCase) ->
+                let gameStateAfterSeeding = { gameState with board = boardAfterSeeding }
+                let gameStateAfterCapture = capture(gameStateAfterSeeding, lastCase)
+
+                if not(hasNoSeeds gameStateAfterCapture nextPlayer) then 
+                    Played { gameStateAfterCapture with currentPlayer = nextPlayer }
+                else
+                    if adversaryHadNoSeed then NeedsToFeed else
+                    Played { gameStateAfterSeeding with currentPlayer = nextPlayer }
+
