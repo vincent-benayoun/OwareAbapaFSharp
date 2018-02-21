@@ -7,7 +7,7 @@ module GameLogic =
     let distributeFrom(board, originCase, currentCase, numberOfSeeds): Board.board * Board.case =
         let rec distributeFrom(board, currentCase, numberOfSeeds): Board.board * Board.case =
             if numberOfSeeds = 0 then
-                (board, currentCase)
+                (board, Board.previousCase currentCase)
             else
                 let nextCase = Board.nextCase currentCase
                 if currentCase = originCase then
