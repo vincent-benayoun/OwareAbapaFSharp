@@ -79,7 +79,7 @@ module GameLogic =
         if Board.getCase gameState.board case = 0 then EmptyCase else
 
         let nextPlayer = Player.nextPlayer gameState.currentPlayer
-        let adversaryHadNoSeed = hasNoSeeds gameState gameState.currentPlayer
+        let adversaryHadNoSeed = hasNoSeeds gameState nextPlayer
         let nothingFeedsAdversary = nothingFeeds gameState
 
         if adversaryHadNoSeed && nothingFeedsAdversary
