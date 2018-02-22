@@ -35,9 +35,9 @@ type GameController() =
         let gameState = GameStateDTO.Decode.gameState data.gameState
         let case = GameStateDTO.Decode.case data.caseId
         match GameLogic.play gameState case with
-        | GameLogic.InvalidCase     -> { status = "InvalidCase"; gameState = data.gameState }
-        | GameLogic.EmptyCase       -> { status = "EmptyCase"; gameState = data.gameState }
-        | GameLogic.NeedsToFeed     -> { status = "NeedsToFeed"; gameState = data.gameState }
+        | GameLogic.InvalidCase     -> { status = "InvalidCase";   gameState = data.gameState }
+        | GameLogic.EmptyCase       -> { status = "EmptyCase";     gameState = data.gameState }
+        | GameLogic.NeedsToFeed     -> { status = "NeedsToFeed";   gameState = data.gameState }
         | GameLogic.InternalError   -> { status = "InternalError"; gameState = data.gameState }
         | GameLogic.Played(game_state) ->
             { status = "OK"; gameState = GameStateDTO.Encode.gameState game_state }

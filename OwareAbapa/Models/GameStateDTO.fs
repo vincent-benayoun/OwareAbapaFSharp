@@ -7,17 +7,25 @@ module GameStateDTO =
     type game_state =
         { board: Board.board;
           currentPlayer: string;
-          score: Score.score }
+          score: Score.score;
+          winStatus: string; }
 
     module Encode =
         let player player =
             match player with | Player.Player1 -> "Player1" | Player.Player2 -> "Player2"
+            
+        let winner winner =
+            match winner with | GameState.Winner(winPlayer) -> sprintf "%s won!" (player winPlayer) | GameState.Exaequo -> "Exaequo"
+
+        let winStatus winStatus =
+            match winStatus with | GameState.StillPlaying -> "" | GameState.GameEnded(gameWinner) -> winner gameWinner
 
         let gameState (gameState:GameState.game_state) =
-        
             { board = gameState.board;
               currentPlayer = player gameState.currentPlayer;
-              score = gameState.score }
+              score = gameState.score;
+              winStatus = winStatus (GameState.getWinStatus gameState); }
+
 
     module Decode =
         let player player =
