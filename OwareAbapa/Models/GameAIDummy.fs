@@ -16,7 +16,7 @@ module GameAIDummy =
         let casesOfPlayer = Board.casesOfPlayer gameState.currentPlayer
         List.collect (gameStateAfterPlaying gameState) casesOfPlayer
 
-    let play gameState =
+    let chooseCaseToPlay gameState =
         let nextGameStatesList = nextGameStates gameState
         let random = new System.Random()
         let randomNextGameStateIndex = random.Next(List.length nextGameStatesList)

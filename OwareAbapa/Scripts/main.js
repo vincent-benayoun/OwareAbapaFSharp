@@ -48,17 +48,17 @@ function newGame() {
     $.getJSON("/api/game/newGame").done(refreshGameState);
 }
 
-function play(caseId) {
-    function handler(data) {
-        if (data.status == "OK") {
-            refreshGameState(data.gameState);
-            displayWinStatus(data.winStatus);
-        } else {
-            alert(data.status);
-        }
+function handlePlayResult(data) {
+    if (data.status == "OK") {
+        refreshGameState(data.gameState);
+        displayWinStatus(data.winStatus);
+    } else {
+        alert(data.status);
     }
+}
 
-    $.post("/api/game/play", { gameState: globalGameState, caseId: caseId }).done(handler);
+function play(caseId) {
+    $.post("/api/game/play", { gameState: globalGameState, caseId: caseId }).done(handlePlayResult);
 }
 
 function clickOnBoardCase() {
@@ -66,9 +66,14 @@ function clickOnBoardCase() {
     play(caseId);
 }
 
+function playAI() {
+    $.post("/api/game/playAI", { gameState: globalGameState }).done(handlePlayResult);
+}
+
 $(function () {
     newGame();
     //$('.boardCase').click(function () { console.log($(this).attr("id")) });
 
     $('.boardCase button').click(clickOnBoardCase);
+    $('#buttonPlayAI').click(playAI);
 });
