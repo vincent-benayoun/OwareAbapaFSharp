@@ -132,8 +132,10 @@
     <Compile Include="Models\Board.fs" />
     <Compile Include="Models\Score.fs" />
     <Compile Include="Models\GameState.fs" />
+    <Compile Include="Models\GameLogic.fsi" />
     <Compile Include="Models\GameLogic.fs" />
     <Compile Include="Models\GameStateDTO.fs" />
+    <Compile Include="Models\GameAI.fs" />
     <Compile Include="Controllers\CarsController.fs" />
     <Compile Include="Controllers\GameController.fs" />
     <Content Include="Web.config" />
