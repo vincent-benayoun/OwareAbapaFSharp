@@ -12,7 +12,7 @@ open OwareAbapa.DTO
 [<CLIMutable>]
 type play_argument = { gameState: GameStateDTO.game_state; caseId: string }
 [<CLIMutable>]
-type playAI_argument = { gameState: GameStateDTO.game_state }
+type playAI_argument = { gameState: GameStateDTO.game_state; strategy: string }
 //[<CLIMutable>]
 type play_result = { status: string; gameState: GameStateDTO.game_state }
 
@@ -47,11 +47,18 @@ type GameController() =
     [<HttpPost>]
     member x.PlayAI(data:playAI_argument) =
         let gameState = GameStateDTO.Decode.gameState data.gameState
-        let case = GameAIDummy.chooseCaseToPlay gameState
-        match GameLogic.play gameState case with
-        | GameLogic.InvalidCase     -> { status = "InvalidCase";   gameState = data.gameState }
-        | GameLogic.EmptyCase       -> { status = "EmptyCase";     gameState = data.gameState }
-        | GameLogic.NeedsToFeed     -> { status = "NeedsToFeed";   gameState = data.gameState }
-        | GameLogic.InternalError   -> { status = "InternalError"; gameState = data.gameState }
-        | GameLogic.Played(game_state) ->
-            { status = "OK"; gameState = GameStateDTO.Encode.gameState game_state }
+        let strategyName = data.strategy
+        match GameAIManager.availableStrategies.TryFind strategyName with
+        | None -> { status = "UnknownAIStrategy";   gameState = data.gameState }
+        | Some chooseCaseToPlay ->
+            let case = chooseCaseToPlay gameState
+            match GameLogic.play gameState case with
+            | GameLogic.InvalidCase     -> { status = "InvalidCase";   gameState = data.gameState }
+            | GameLogic.EmptyCase       -> { status = "EmptyCase";     gameState = data.gameState }
+            | GameLogic.NeedsToFeed     -> { status = "NeedsToFeed";   gameState = data.gameState }
+            | GameLogic.InternalError   -> { status = "InternalError"; gameState = data.gameState }
+            | GameLogic.Played(game_state) ->
+                { status = "OK"; gameState = GameStateDTO.Encode.gameState game_state }
+            
+    [<HttpGet>]
+    member x.GetAIStrategies() = GameAIManager.availableStrategies

@@ -57,10 +57,31 @@ function newGame() {
     $.getJSON("/api/game/newGame").done(refreshGameState);
 }
 
+function playNextMoveIfAI() {
+    if (globalGameState.winStatus) {
+        return;
+    }
+    let selectedStrategy;
+    switch (globalGameState.currentPlayer) {
+        case "Player1":
+            selectedStrategy = $("#selectAIPlayer1").val();
+            break;
+        case "Player2":
+            selectedStrategy = $("#selectAIPlayer2").val();
+            break;
+        default:
+            selectedStrategy = "none";
+    }
+    if (selectedStrategy != "none") {
+        playAI(selectedStrategy);
+    }
+}
+
 function handlePlayResult(data) {
     if (data.status == "OK") {
         refreshGameState(data.gameState);
         displayWinStatus(data.winStatus);
+        setTimeout(() => { playNextMoveIfAI() }, 1000);
     } else {
         alert(data.status);
     }
@@ -75,8 +96,11 @@ function clickOnBoardCase() {
     play(caseId);
 }
 
-function playAI() {
-    $.post("/api/game/playAI", { gameState: globalGameState }).done(handlePlayResult);
+function playAI(strategy) {
+    if (!strategy) {
+        return;
+    }
+    $.post("/api/game/playAI", { gameState: globalGameState, strategy }).done(handlePlayResult);
 }
 
 function updateNumberOfPreviousAndNextGameState() {
@@ -102,13 +126,41 @@ function redo() {
     }
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function displayAIStrategies(aiStrategies) {
+    let selectAIPlayer1 = $('#selectAIPlayer1');
+    let selectAIPlayer2 = $('#selectAIPlayer2');
+
+    let makeOption = function(name) {
+        return "<option value=\"" + name + "\">" + capitalizeFirstLetter(name) + "</option>";
+    }
+
+    selectAIPlayer1.append(makeOption("none"));
+    selectAIPlayer2.append(makeOption("none"));
+    for (let strategyName in aiStrategies) {
+        let strategyOption = makeOption(strategyName);
+        selectAIPlayer1.append(strategyOption);
+        selectAIPlayer2.append(strategyOption);
+    }
+}
+
+function loadAIStrategies() {
+    $.getJSON("/api/game/getAIStrategies").done(displayAIStrategies);
+}
+
 $(function () {
     newGame();
     //$('.boardCase').click(function () { console.log($(this).attr("id")) });
 
     $('.boardCase button').click(clickOnBoardCase);
-    $('#buttonPlayAI').click(playAI);
+    $('#selectAIPlayer1').change(playNextMoveIfAI);
+    $('#selectAIPlayer2').change(playNextMoveIfAI);
 
     $('#buttonUndo').click(undo);
     $('#buttonRedo').click(redo);
+
+    loadAIStrategies();
 });

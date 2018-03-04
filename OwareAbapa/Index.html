@@ -31,14 +31,14 @@
             </tbody>
         </table>
         <br />
-        <div style="text-align: center"><button id="buttonPlayAI">Let AI play this turn</button></div>
-        <br />
         <div style="text-align: center">
             <button id="buttonUndo">(<span id="numberPreviousGameState"></span>) &lt; Undo</button>
             <button id="buttonRedo">Redo &gt; (<span id="numberNextGameState"></span>)</button>
         </div>
         <br />
         <div id="messageBox" style="font-size: large; font-weight: bold; text-align: center"></div>
+        <br />
+        <div style="text-align: center">Automatic AI for Player 2: <select id="selectAIPlayer2"></select></div>
         <br />
         <table class="table" style="border: 1px solid">
             <tbody>
@@ -60,6 +60,7 @@
             </tr>
             </tbody>
         </table>
+        <div style="text-align: center">Automatic AI for Player 1: <select id="selectAIPlayer1"></select></div>
     </div>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
