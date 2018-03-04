@@ -8,6 +8,7 @@ module GameStateDTO =
         { board: Board.board;
           currentPlayer: string;
           score: Score.score;
+          nbSteps: int;
           winStatus: string; }
 
     module Encode =
@@ -24,6 +25,7 @@ module GameStateDTO =
             { board = gameState.board;
               currentPlayer = player gameState.currentPlayer;
               score = gameState.score;
+              nbSteps = gameState.nbSteps;
               winStatus = winStatus (GameState.getWinStatus gameState); }
 
 
@@ -34,6 +36,7 @@ module GameStateDTO =
         let gameState gameState =
             { GameState.game_state.board = gameState.board;
               GameState.game_state.currentPlayer = player gameState.currentPlayer;
+              GameState.game_state.nbSteps = gameState.nbSteps;
               GameState.game_state.score = gameState.score }
 
         let case case =

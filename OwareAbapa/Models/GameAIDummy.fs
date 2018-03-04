@@ -14,7 +14,9 @@ module GameAIDummy =
 
     let nextGameStates gameState =
         let casesOfPlayer = Board.casesOfPlayer gameState.currentPlayer
-        List.collect (gameStateAfterPlaying gameState) casesOfPlayer
+        let nextList = List.collect (gameStateAfterPlaying gameState) casesOfPlayer
+        let nb = List.length nextList = 0
+        nextList
 
     let chooseCaseToPlay gameState =
         let nextGameStatesList = nextGameStates gameState

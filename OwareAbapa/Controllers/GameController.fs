@@ -13,6 +13,10 @@ open OwareAbapa.DTO
 type play_argument = { gameState: GameStateDTO.game_state; caseId: string }
 [<CLIMutable>]
 type playAI_argument = { gameState: GameStateDTO.game_state; strategy: string }
+[<CLIMutable>]
+type playAIBenchmark_argument = { strategy1: string; strategy2: string }
+[<CLIMutable>]
+type playAIBenchmark_result = { nbTimesPlayer1Won: int; nbTimesExaequo: int; nbTimesPlayer2Won: int }
 //[<CLIMutable>]
 type play_result = { status: string; gameState: GameStateDTO.game_state }
 
@@ -62,3 +66,20 @@ type GameController() =
             
     [<HttpGet>]
     member x.GetAIStrategies() = GameAIManager.availableStrategies
+
+    [<HttpPost>]
+    member x.BenchmarkTwoStrategies(data:playAIBenchmark_argument) =
+        let strategyName1 = data.strategy1
+        let strategyName2 = data.strategy2
+        let rec benchmark nbTimes acc =
+            if nbTimes <= 0 then acc else
+            let acc =
+                match GameAIManager.playContestByStrategyNames strategyName1 strategyName2 with
+                | None -> acc
+                | Some (GameState.Winner(Player.Player1)) -> {acc with nbTimesPlayer1Won = acc.nbTimesPlayer1Won + 1}
+                | Some (GameState.Winner(Player.Player2)) -> {acc with nbTimesPlayer2Won = acc.nbTimesPlayer2Won + 1}
+                | Some (GameState.Exaequo)                -> {acc with nbTimesExaequo = acc.nbTimesExaequo + 1}
+            benchmark (nbTimes - 1) acc
+        benchmark 1000 {nbTimesPlayer1Won = 0; nbTimesExaequo = 0; nbTimesPlayer2Won = 0}
+
+

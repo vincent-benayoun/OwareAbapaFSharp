@@ -4,11 +4,13 @@ module GameState =
 
     type game_state = { currentPlayer: Player.player;
                         board: Board.board;
-                        score: Score.score; }
+                        score: Score.score;
+                        nbSteps: int }
 
     let initial = { currentPlayer = Player.Player1;
                     board = Board.initial;
-                    score = Score.initial }
+                    score = Score.initial;
+                    nbSteps = 0 }
 
     type winner = Winner of Player.player | Exaequo
     type win_status = StillPlaying | GameEnded of winner

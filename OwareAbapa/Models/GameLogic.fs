@@ -34,6 +34,10 @@ module GameLogic =
         | Player2 -> (match case with | C7|C8|C9|C10|C11|C12 -> true | _ -> false)
 
     open GameState
+    
+    let hasNoSeeds board player =
+        let casesOfPlayer = Board.casesOfPlayer player
+        List.forall (fun case -> Board.getCase board case = 0) casesOfPlayer
 
     let rec capture(gameState, case) =
         let nextPlayer = Player.nextPlayer(gameState.currentPlayer)
@@ -53,10 +57,6 @@ module GameLogic =
         let numberOfSeeds = List.reduce (+) (List.map getCase Board.allCases)
         {gameState with board = Board.empty;
                         score = Score.addPoints(gameState.score, gameState.currentPlayer, numberOfSeeds) }
-
-    let hasNoSeeds gameState player =
-        let casesOfPlayer = Board.casesOfPlayer player
-        List.forall (fun case -> Board.getCase gameState.board case = 0) casesOfPlayer
 
     let nothingFeeds gameState =
         let casesOfPlayer = Board.casesOfPlayer gameState.currentPlayer
@@ -79,7 +79,7 @@ module GameLogic =
         if Board.getCase gameState.board case = 0 then EmptyCase else
 
         let nextPlayer = Player.nextPlayer gameState.currentPlayer
-        let adversaryHadNoSeed = hasNoSeeds gameState nextPlayer
+        let adversaryHadNoSeed = hasNoSeeds gameState.board nextPlayer
         let nothingFeedsAdversary = nothingFeeds gameState
 
         if adversaryHadNoSeed && nothingFeedsAdversary
@@ -89,12 +89,13 @@ module GameLogic =
             match seeds gameState.board case with
             | InvalidArgument -> InternalError
             | Distrubuted(boardAfterSeeding, lastCase) ->
-                let gameStateAfterSeeding = { gameState with board = boardAfterSeeding }
+                let adversaryHadNoSeedAfterSeeding = hasNoSeeds boardAfterSeeding nextPlayer
+                let gameStateAfterSeeding = { gameState with board = boardAfterSeeding; nbSteps = gameState.nbSteps + 1 }
                 let gameStateAfterCapture = capture(gameStateAfterSeeding, lastCase)
 
-                if not(hasNoSeeds gameStateAfterCapture nextPlayer) then 
+                if not(hasNoSeeds gameStateAfterCapture.board nextPlayer) then 
                     Played { gameStateAfterCapture with currentPlayer = nextPlayer }
                 else
-                    if adversaryHadNoSeed then NeedsToFeed else
+                    if adversaryHadNoSeedAfterSeeding then NeedsToFeed else
                     Played { gameStateAfterSeeding with currentPlayer = nextPlayer }
 
