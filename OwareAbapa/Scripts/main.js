@@ -23,8 +23,10 @@ function displayGameState(gameState) {
     $('#messageBox').html(gameState.winStatus);
     if (gameState.winStatus != "") {
         $('.boardCase button').attr("disabled", "disabled");
+        $('#buttonPlayAI').attr("disabled", "disabled");
     } else {
-        $('.boardCase button').removeAttr("disabled")
+        $('.boardCase button').removeAttr("disabled");
+        $('#buttonPlayAI').removeAttr("disabled");
     }
 
     for (let i = 0; i <= 12; i++) {
