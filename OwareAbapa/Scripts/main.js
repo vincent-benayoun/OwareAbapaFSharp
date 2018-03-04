@@ -1,4 +1,6 @@
 ﻿var globalGameState;
+var previousGlobalGameStates = [];
+var nextGlobalGameStates = [];
 
 function animateElement(caseElement, direction) {
     var intermediateColor = direction ? "green" : "red";
@@ -40,8 +42,13 @@ function displayWinStatus(winStatus) {
 }
 
 function refreshGameState(newGameState) {
+    if (globalGameState) {
+        previousGlobalGameStates.push(globalGameState);
+    }
     globalGameState = newGameState;
-    displayGameState(globalGameState);
+    nextGlobalGameStates = [];
+    displayGameState(newGameState);
+    updateNumberOfPreviousAndNextGameState();
 }
 
 function newGame() {
@@ -70,10 +77,36 @@ function playAI() {
     $.post("/api/game/playAI", { gameState: globalGameState }).done(handlePlayResult);
 }
 
+function updateNumberOfPreviousAndNextGameState() {
+    $('#numberPreviousGameState').html(previousGlobalGameStates.length);
+    $('#numberNextGameState').html(nextGlobalGameStates.length);
+}
+
+function undo() {
+    if (previousGlobalGameStates.length > 0) {
+        nextGlobalGameStates.push(globalGameState);
+        globalGameState = previousGlobalGameStates.pop();
+        displayGameState(globalGameState);
+        updateNumberOfPreviousAndNextGameState();
+    }
+}
+
+function redo() {
+    if (nextGlobalGameStates.length > 0) {
+        previousGlobalGameStates.push(globalGameState);
+        globalGameState = nextGlobalGameStates.pop();
+        displayGameState(globalGameState);
+        updateNumberOfPreviousAndNextGameState();
+    }
+}
+
 $(function () {
     newGame();
     //$('.boardCase').click(function () { console.log($(this).attr("id")) });
 
     $('.boardCase button').click(clickOnBoardCase);
     $('#buttonPlayAI').click(playAI);
+
+    $('#buttonUndo').click(undo);
+    $('#buttonRedo').click(redo);
 });
