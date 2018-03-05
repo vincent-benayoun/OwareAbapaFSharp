@@ -1,9 +1,10 @@
 ﻿namespace OwareAbapa.Models
 
 module GameAIManager =
+
     let availableStrategies =
-        ["dummy", GameAIDummy.chooseCaseToPlay;
-         "one", GameAIDummy.chooseCaseToPlay] |> Map.ofList
+        [ "dummy", GameAIDummy.chooseCaseToPlay;
+          "one", GameAIDummy.chooseCaseToPlay ] |> Map.ofList
 
     let playContest strategy1 strategy2 =
         let gameState = GameState.initial

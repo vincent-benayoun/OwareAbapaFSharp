@@ -71,7 +71,7 @@ type GameController() =
     member x.BenchmarkTwoStrategies(data:playAIBenchmark_argument) =
         let strategyName1 = data.strategy1
         let strategyName2 = data.strategy2
-        let rec benchmark nbTimes acc =
+        let rec benchmark strategyName1 strategyName2 nbTimes acc =
             if nbTimes <= 0 then acc else
             let acc =
                 match GameAIManager.playContestByStrategyNames strategyName1 strategyName2 with
@@ -79,7 +79,11 @@ type GameController() =
                 | Some (GameState.Winner(Player.Player1)) -> {acc with nbTimesPlayer1Won = acc.nbTimesPlayer1Won + 1}
                 | Some (GameState.Winner(Player.Player2)) -> {acc with nbTimesPlayer2Won = acc.nbTimesPlayer2Won + 1}
                 | Some (GameState.Exaequo)                -> {acc with nbTimesExaequo = acc.nbTimesExaequo + 1}
-            benchmark (nbTimes - 1) acc
-        benchmark 1000 {nbTimesPlayer1Won = 0; nbTimesExaequo = 0; nbTimesPlayer2Won = 0}
+            benchmark strategyName1 strategyName2 (nbTimes - 1) acc
+        let resultPlayer1First = benchmark strategyName1 strategyName2 500 {nbTimesPlayer1Won = 0; nbTimesExaequo = 0; nbTimesPlayer2Won = 0}
+        let resultPlayer2First = benchmark strategyName2 strategyName1 500 {nbTimesPlayer1Won = 0; nbTimesExaequo = 0; nbTimesPlayer2Won = 0}
+        { nbTimesPlayer1Won = resultPlayer1First.nbTimesPlayer1Won + resultPlayer2First.nbTimesPlayer2Won;
+          nbTimesExaequo = resultPlayer1First.nbTimesExaequo + resultPlayer2First.nbTimesExaequo;
+          nbTimesPlayer2Won = resultPlayer1First.nbTimesPlayer2Won + resultPlayer2First.nbTimesPlayer1Won; }
 
 
