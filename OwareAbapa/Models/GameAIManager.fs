@@ -4,7 +4,10 @@ module GameAIManager =
 
     let availableStrategies =
         [ "dummy", GameAIDummy.chooseCaseToPlay;
-          "one", GameAIDummy.chooseCaseToPlay ] |> Map.ofList
+          "one", GameAIDummy.chooseCaseToPlay;
+          "meir2", GameAIMeir.chooseCaseToPlay 2;
+          "meir3", GameAIMeir.chooseCaseToPlay 3;
+          "meir4", GameAIMeir.chooseCaseToPlay 4 ] |> Map.ofList
 
     let playContest strategy1 strategy2 =
         let gameState = GameState.initial

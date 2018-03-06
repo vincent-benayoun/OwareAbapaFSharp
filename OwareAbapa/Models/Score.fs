@@ -13,3 +13,8 @@ module Score =
         match player with
         | Player1 -> { score with Player1 = score.Player1 + numberOfPoints }
         | Player2 -> { score with Player2 = score.Player2 + numberOfPoints }
+
+    let getScore score player =
+        match player with
+        | Player1 -> score.Player1
+        | Player2 -> score.Player2
